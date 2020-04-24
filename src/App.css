@@ -1,38 +1,53 @@
-.App {
+h1 {
+  color:rgb(63, 81, 181);
+  font-weight: bold;
+}
+.buttons-right>button {
+  float: right;
+  margin: 5px;
+}
+.app-container {
+  padding: 25px;
+}
+
+.percentage-number {
+  color: rgb(63, 81, 181);
+  font-size: 50px;
+  font-weight: bold;
+}
+.percentage-sign {
+  color: rgb(63, 81, 181);
+  font-size: 40px;
+}
+.percentage-container {
   text-align: center;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.percentage-container:first-child {
+  padding-bottom: 3em;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.container .row div {
+  outline: solid 1px black;
+}
+
+
+.select-search {
+    width: 300px;
+    position: relative;
+    margin-bottom: 20px;
+    font-family: 'Nunito Sans', sans-serif;
+    box-sizing: border-box;
+}
+
+.select-search *,
+.select-search *::after,
+.select-search *::before {
+    box-sizing: inherit;
+}
+
+  .cancel-button {
+        position: relative;
+    bottom: 10px;
+    right: 73px;
+    cursor: pointer;
   }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
