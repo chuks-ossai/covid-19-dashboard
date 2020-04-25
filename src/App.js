@@ -9,8 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { savePDF } from '@progress/kendo-react-pdf';
 import { Ripple } from '@progress/kendo-react-ripple';
-import { Dialog, DialogActionsBar } from '@progress/kendo-react-dialogs';
-import { Input } from '@progress/kendo-react-inputs';
+import { Dialog } from '@progress/kendo-react-dialogs';
 import DonutChartContainer from './components/charts/doughnut.chart';
 import LineChartContainer from './components/charts/line.chart';
 import 'bootstrap-4-grid/css/grid.min.css';
@@ -253,9 +252,10 @@ class App extends Component {
   updateCountry = (value) => {
     if (value) {
       this.getSingleContryData(value);
-      this.setState({
+      this.setState(prevState => ({
         selectedCountry: value,
-      });
+        showDialog: !prevState.showDialog
+      }))
     } else {
       this.getContryData();
     }
@@ -263,7 +263,6 @@ class App extends Component {
 
   handleClear = () => {
     this.getContryData();
-    this.setState(prevState => ({showDialog: !prevState.showDialog }))
   }
 
   render() {
@@ -403,15 +402,28 @@ class App extends Component {
             </div>
           </div>
           {this.state.showDialog && (
-            <Dialog title={'Share this report'} onClose={this.handleShare}>
-              <p>Please enter the email address/es of the recipient/s.</p>
-              <Input placeholder="example@progress.com" />
-              <DialogActionsBar>
-                <Button primary={true} onClick={this.handleShare}>
-                  Share
-                </Button>
-                <Button onClick={this.handleShare}>Cancel</Button>
-              </DialogActionsBar>
+            <Dialog title={`${this.state.countryData[0].continent} (${this.state.countryData[0].country})`} onClose={this.handleShare}>
+              {this.state.countryData.map(country => (
+                <>
+                  <p>Tests Carried Out: <span className="font-weight-bold">{country.tests.toLocaleString('en')}</span></p>
+                  <div className="row">
+                    <div className="col-6">
+                      <h6>Cases</h6>
+                      <p className="m-1 p-2 bg-warning">Active: <span className="font-weight-bold">{country.active.toLocaleString('en')}</span></p>
+                      <p className="m-1 p-2 bg-warning">Critical: <span className="font-weight-bold"></span>{country.critical.toLocaleString('en')}</p>
+                      <p className="m-1 p-2 bg-warning">Today: <span className="font-weight-bold">{country.todayCases.toLocaleString('en')}</span></p>
+                      <hr />
+                      <p className="m-1 p-2 bg-warning">Total: <span className="font-weight-bold">{country.cases.toLocaleString('en')}</span></p>
+                    </div>
+                    <div className="col-6">
+                      <h6>Other Info</h6>
+                      <p className="m-1 p-2 bg-danger text-light text-center">Today's Deaths: <span className="font-weight-bold">{country.todayDeaths.toLocaleString('en')}</span></p>
+                      <p className="m-1 p-2 bg-danger text-light text-center">Total Deaths: <span className="font-weight-bold">{country.deaths.toLocaleString('en')}</span></p>
+                      <p className="m-1 p-2 bg-success text-light">Recovered: <span className="font-weight-bold">{country.deaths.toLocaleString('en')}</span></p>
+                    </div>
+                  </div>
+                  </>
+              ))}
             </Dialog>
           )}
         </div>

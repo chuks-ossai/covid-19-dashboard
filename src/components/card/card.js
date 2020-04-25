@@ -19,7 +19,7 @@ const CardContainer = ({
       )}
       {summaryData && totalCases && (
         <div>
-          <h2 className="text-center text-danger">
+          <h2 className="text-center text-warning">
             {summaryData.cases.toLocaleString('en')}
           </h2>
         </div>
@@ -44,7 +44,7 @@ const CardContainer = ({
           <ListGroup variant="flush">
             {countryData.map((item) => (
               <ListGroup.Item key={item.country} className="p-0 text-center">
-                   <span className="font-weight-bold text-danger"> {item.cases.toLocaleString('en')}</span> {' '} {item.countryInfo.iso3}
+                   <span className="font-weight-bold text-warning"> {item.cases.toLocaleString('en')}</span> {' '} {item.countryInfo.iso3}
               </ListGroup.Item>
             ))}
           </ListGroup>
