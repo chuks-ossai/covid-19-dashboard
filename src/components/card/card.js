@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, ListGroup } from 'react-bootstrap';
 import { Button } from '@progress/kendo-react-buttons';
-import Filter from '../filter';
 import './card.css';
 
 const CardContainer = ({
@@ -11,25 +10,20 @@ const CardContainer = ({
   handleButtonClick,
   totalCases,
   totalDeaths,
-  totalRecovered,
-  handleFilterInputChange,
-  showFilter
+  totalRecovered
 }) => (
   <Card className="my-2">
     <Card.Body className="p-2">
-      {title && <Card.Subtitle className="text-center mb-1">{title}</Card.Subtitle>}
+      {title && (
+        <Card.Subtitle className="text-center mb-1">{title}</Card.Subtitle>
+      )}
       {summaryData && totalCases && (
         <div>
           <h2 className="text-center text-danger">
             {summaryData.cases.toLocaleString('en')}
           </h2>
         </div>
-        )}
-        {
-          showFilter && (
-            <Filter inputChange={handleFilterInputChange} />
-          )
-        }
+      )}
       {summaryData && totalDeaths && (
         <div>
           <h2 className="text-center text-danger">
@@ -54,9 +48,7 @@ const CardContainer = ({
                   <div className="col-7 font-weight-bold text-danger text-right">
                     {item.cases.toLocaleString('en')}
                   </div>
-                  <div className="col-5">
-                    {item.countryInfo.iso3}
-                  </div>
+                  <div className="col-5">{item.countryInfo.iso3}</div>
                 </div>
               </ListGroup.Item>
             ))}

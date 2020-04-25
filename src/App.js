@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
+import moment from 'moment';
 import SelectSearch from 'react-select-search';
 import 'react-select-search/style.css';
 import { Button } from '@progress/kendo-react-buttons';
@@ -17,6 +18,10 @@ import '@progress/kendo-theme-material/dist/all.css';
 import './App.css';
 import CardContainer from './components/card/card';
 import EnhancedTable from './components/data-table/data-table-container';
+import ShimmerLoader from './components/shimmer-loader';
+import { Card } from '@material-ui/core';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 
 
 const columns = [
@@ -92,11 +97,12 @@ class App extends Component {
       donutChartData: {},
       lineChartData: {},
       summaryData: undefined,
-      countryData: [],
+      countryData: undefined,
       filterCountries: [],
       transformedCountries: [],
       selectedCountry: 'USA',
       rows: [],
+      loading: true
     };
   }
 
@@ -108,8 +114,7 @@ class App extends Component {
     this.setState(
       {
         showDialog: !this.state.showDialog,
-      },
-      () => console.log(this.state)
+      }
     );
   };
 
@@ -125,7 +130,7 @@ class App extends Component {
       const response = await axios.get(
         'https://corona.lmao.ninja/v2/continents'
       );
-      this.setState((prevState) => ({
+      this.setState(() => ({
         donutChartData: {
           labels: response.data.map((d) => d.continent),
           datasets: [
@@ -143,6 +148,7 @@ class App extends Component {
             },
           ],
         },
+        loading: false
       }));
     } catch (error) {
       console.error(error);
@@ -154,6 +160,7 @@ class App extends Component {
       const response = await axios.get('https://corona.lmao.ninja/v2/all');
       this.setState((prevState) => ({
         summaryData: response.data,
+        loading: !prevState.loading
       }));
     } catch (error) {
       console.error(error);
@@ -168,8 +175,6 @@ class App extends Component {
       const response = await axios.get(
         'https://corona.lmao.ninja/v2/countries?sort=cases'
       );
-
-      console.log(response.data);
 
       this.setState(() => ({
         countryData: response.data,
@@ -216,7 +221,6 @@ class App extends Component {
           )
         ),
       }));
-      console.log(this.state.transformedCountries);
     } catch (error) {
       console.error(error);
     }
@@ -227,8 +231,6 @@ class App extends Component {
       const response = await axios.get(
         `https://corona.lmao.ninja/v2/countries/${country}?yesterday=true`
       );
-
-      console.log(response.data);
       const data = [response.data]
 
       this.setState((prevState) => ({
@@ -244,7 +246,6 @@ class App extends Component {
           )
         ),
       }));
-      console.log(this.state.transformedCountries);
     } catch (error) {
       console.error(error);
     }
@@ -274,7 +275,7 @@ class App extends Component {
         >
           <div className="row">
             <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-              <h1>Covid-19 | Dashboard</h1>
+              <h2>Covid-19 | Dashboard</h2>
             </div>
             <div className="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 d-flex justify-content-center align-items-center">
               <SelectSearch
@@ -299,56 +300,104 @@ class App extends Component {
           </div>
           <div className="row">
             <div className="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 px-1">
-              <CardContainer
-                summaryData={this.state.summaryData}
-                title={'World Wide Confirmed Cases'}
-                totalCases={true}
-              />
-              <CardContainer
-                countryData={this.state.countryData}
-                title={'Confirmed Cases by Country'}
-                totalCases={true}
-              />
+              <div className="row">
+                <div className="col-12">
+                  {this.state.summaryData ? (
+                    <>
+                      <CardContainer
+                        summaryData={this.state.summaryData}
+                        title={'World Wide Confirmed Cases'}
+                        totalCases={true}
+                      />
+                      <CardContainer
+                        countryData={this.state.countryData}
+                        title={'Confirmed Cases by Country'}
+                        totalCases={true}
+                      />
+                    </>
+                  ) : (
+                    <ShimmerLoader count={25} />
+                  )}
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-12">
+                  <Card>
+                    <CardContent>
+                      <Typography>
+                        Last Updated: <span className="font-weight-bold">{moment().format('llll')}</span>
+                      </Typography>
+                    </CardContent>
+                    <p></p>
+                  </Card>
+                </div>
+              </div>
             </div>
             <div className="col-xs-7 col-sm-7 col-md-7 col-lg-7 col-xl-7 p-1">
               <div className="row">
                 <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                  <LineChartContainer data={this.state.lineChartData} />
+                  {this.state.lineChartData.datasets ? (
+                    <>
+                      <LineChartContainer data={this.state.lineChartData} />
+                    </>
+                  ) : (
+                    <>
+                      <ShimmerLoader count={12} />
+                    </>
+                  )}
                 </div>
               </div>
               <div className="row">
                 <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                  <EnhancedTable
-                    rows={this.state.rows}
-                    headCells={headCells}
-                    columns={columns}
-                    data={this.state.countryData}
-                  />
+                  {this.state.countryData ? (
+                    <>
+                      <EnhancedTable
+                        rows={this.state.rows}
+                        headCells={headCells}
+                        columns={columns}
+                        data={this.state.countryData}
+                      />
+                    </>
+                  ) : (
+                    <ShimmerLoader count={12} />
+                  )}
                 </div>
               </div>
             </div>
             <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-1">
               <div className="row">
                 <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 pr-0">
-                  <CardContainer
-                    summaryData={this.state.summaryData}
-                    countryData={this.state.countryData}
-                    title={'Total Deaths'}
-                    totalDeaths={true}
-                  />
+                  {this.state.countryData ? (
+                    <CardContainer
+                      summaryData={this.state.summaryData}
+                      countryData={this.state.countryData}
+                      title={'Total Deaths'}
+                      totalDeaths={true}
+                    />
+                  ) : (
+                    <ShimmerLoader count={25} />
+                  )}
                 </div>
                 <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 pl-1">
-                  <CardContainer
-                    countryData={this.state.countryData}
-                    summaryData={this.state.summaryData}
-                    title={'Total Recovered'}
-                    totalRecovered={true}
-                  />
+                  {this.state.countryData ? (
+                    <CardContainer
+                      countryData={this.state.countryData}
+                      summaryData={this.state.summaryData}
+                      title={'Total Recovered'}
+                      totalRecovered={true}
+                    />
+                  ) : (
+                    <ShimmerLoader count={25} />
+                  )}
                 </div>
               </div>
               <div className="row">
                 <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                  <DonutChartContainer data={this.state.donutChartData} />
+                  {this.state.donutChartData.datasets ? (
+                    <DonutChartContainer data={this.state.donutChartData} />
+                  ) : (
+                    <ShimmerLoader circle={true} />
+                  )}
                 </div>
               </div>
             </div>

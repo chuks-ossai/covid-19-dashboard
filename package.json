@@ -1,5 +1,5 @@
 {
-  "name": "sales-dashboard",
+  "name": "covid-19-dashboard",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -32,6 +32,7 @@
     "react-bootstrap": "^1.0.0",
     "react-chartjs-2": "^2.9.0",
     "react-dom": "^16.13.1",
+    "react-loading-skeleton": "^2.0.1",
     "react-scripts": "3.4.1",
     "react-select-search": "^1.0.2",
     "react-table": "^7.0.4",
