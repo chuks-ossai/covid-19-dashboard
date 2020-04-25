@@ -21,7 +21,6 @@ import EnhancedTable from './components/data-table/data-table-container';
 import ShimmerLoader from './components/shimmer-loader';
 import { Card } from '@material-ui/core';
 import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
 
 
 const columns = [
@@ -264,6 +263,7 @@ class App extends Component {
 
   handleClear = () => {
     this.getContryData();
+    this.setState(prevState => ({showDialog: !prevState.showDialog }))
   }
 
   render() {
@@ -324,9 +324,9 @@ class App extends Component {
                 <div className="col-12">
                   <Card>
                     <CardContent>
-                      <Typography>
-                        Last Updated: <span className="font-weight-bold">{moment().format('llll')}</span>
-                      </Typography>
+                      <>
+                        Last Updated: {this.state.summaryData ? (<span className="font-weight-bold">{moment(this.state.summaryData?.updated).format('llll')}</span>) : (<ShimmerLoader count={1} />)}
+                      </>
                     </CardContent>
                     <p></p>
                   </Card>
@@ -366,7 +366,7 @@ class App extends Component {
             </div>
             <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-1">
               <div className="row">
-                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 pr-0">
+                <div className="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 pr-lg-1">
                   {this.state.countryData ? (
                     <CardContainer
                       summaryData={this.state.summaryData}
@@ -378,7 +378,7 @@ class App extends Component {
                     <ShimmerLoader count={25} />
                   )}
                 </div>
-                <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 pl-1">
+                <div className="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 pl-lg-1">
                   {this.state.countryData ? (
                     <CardContainer
                       countryData={this.state.countryData}
