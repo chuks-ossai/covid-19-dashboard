@@ -419,7 +419,7 @@ class App extends Component {
                       <h6>Other Info</h6>
                       <p className="m-1 p-2 bg-danger text-light text-center">Today's Deaths: <span className="font-weight-bold">{country.todayDeaths.toLocaleString('en')}</span></p>
                       <p className="m-1 p-2 bg-danger text-light text-center">Total Deaths: <span className="font-weight-bold">{country.deaths.toLocaleString('en')}</span></p>
-                      <p className="m-1 p-2 bg-success text-light">Recovered: <span className="font-weight-bold">{country.deaths.toLocaleString('en')}</span></p>
+                      <p className="m-1 p-2 bg-success text-light">Recovered: <span className="font-weight-bold">{country.recovered.toLocaleString('en')}</span></p>
                     </div>
                   </div>
                   </>
